@@ -1,0 +1,40 @@
+version: "3.3"
+services:
+  user_balance:
+    env_file:
+      - .env
+    build: 
+      context: ../
+      dockerfile: ./docker/user_balance/Dockerfile
+    container_name: user_balance.user_balance
+    volumes:
+      - ../:/var/www/user_balance/
+    depends_on:
+      - mysql
+    networks:
+      user_balance:
+        ipv4_address: 10.53.0.4
+    restart: always
+    ports:
+      - "9000:8000"
+
+  mysql:
+    env_file:
+      - .env
+    build: ./mysql
+    container_name: mysql.user_balance
+    volumes:
+      - ${MYSQL_DATA_PATH}:/var/lib/mysql/
+    networks:
+      user_balance:
+        ipv4_address: 10.53.0.3
+    restart: always
+    ports:
+      - "3306:3306"
+networks:
+  user_balance:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.53.0.0/16
+         gateway: 10.53.0.1
