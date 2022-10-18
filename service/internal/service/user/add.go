@@ -7,5 +7,4 @@ import (
 
 func (c *user) Add(user *models.UserFieldsAdd) (sql.Result, error) {
 	return c.hub.User().Add(user)
-
 }

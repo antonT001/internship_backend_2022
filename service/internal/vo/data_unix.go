@@ -8,16 +8,16 @@ import (
 )
 
 type DateUnix struct {
-	value int64
+	value uint64
 }
 
-func ExamineDateUniix(value int64) (DateUnix, error) {
+func ExamineDateUniix(value uint64) (DateUnix, error) {
 	var (
 		DateUnix DateUnix
 		err      error
 	)
 
-	if value > time.Now().Unix() && value < 1192406400 { //1192406400 - 15 Oct 2007 00:00:00 GMT
+	if value > uint64(time.Now().Unix()) && value < 1192406400 { //1192406400 - 15 Oct 2007 00:00:00 GMT
 		err = fmt.Errorf("init timestamp error")
 	}
 	DateUnix.value = value
@@ -31,7 +31,7 @@ func (d DateUnix) MarshalJSON() ([]byte, error) {
 
 func (d *DateUnix) Scan(value interface{}) error {
 	switch value := value.(type) {
-	case int64:
+	case uint64:
 		d.value = value
 		return nil
 	default:
@@ -39,7 +39,7 @@ func (d *DateUnix) Scan(value interface{}) error {
 	}
 }
 
-func (d DateUnix) DateUnix() int64 {
+func (d DateUnix) DateUnix() uint64 {
 	return d.value
 }
 

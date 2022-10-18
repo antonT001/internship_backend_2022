@@ -7,6 +7,7 @@ import (
 	"time"
 	"user_balance/service/internal/clients"
 	"user_balance/service/internal/logger"
+	"user_balance/service/internal/middlewares"
 	"user_balance/service/internal/repository"
 	userService "user_balance/service/internal/service/user"
 
@@ -20,11 +21,15 @@ func main() {
 	db := clients.New(logger)
 	hub := repository.New(db, logger)
 
+	commonMiddleware := middlewares.NewCommonMiddleware()
+
 	userService := userService.New(hub, logger)
 
 	userHandle := userHttp.New(userService, logger)
 
 	router := mux.NewRouter()
+	router.Use(commonMiddleware.Handle)
+
 	userRouter := router.PathPrefix("/user").Subrouter()
 
 	userRouter.HandleFunc("/add", userHandle.Add).Methods(http.MethodPost)

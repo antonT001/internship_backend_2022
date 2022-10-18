@@ -21,7 +21,6 @@ func (u *user) Add(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-
 	userAddIn, err := validateAdd(bodyBytes)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
@@ -54,17 +53,11 @@ func validateAdd(bodyBytes []byte) (*models.UserFieldsAdd, error) {
 		return nil, fmt.Errorf(c.JSON_PARSE_ERROR)
 	}
 
-	id, err := vo.ExamineIntID(productAdd.ID)
-	if err != nil {
-		return nil, fmt.Errorf(c.ID + err.Error())
-	}
-	productAddIn.ID = id
-
-	balance, err := vo.ExamineDeltaMoney(productAdd.Balance)
+	userName, err := vo.ExamineName(productAdd.UserName)
 	if err != nil {
 		return nil, fmt.Errorf(c.BALANCE + err.Error())
 	}
-	productAddIn.Balance = balance
+	productAddIn.UserName = *userName
 
 	return &productAddIn, nil
 }
