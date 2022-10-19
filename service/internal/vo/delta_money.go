@@ -7,10 +7,10 @@ import (
 )
 
 type DeltaMoney struct {
-	value float64
+	value uint64
 }
 
-func ExamineDeltaMoney(value float64) (DeltaMoney, error) {
+func ExamineDeltaMoney(value uint64) (DeltaMoney, error) {
 	var (
 		id  DeltaMoney
 		err error
@@ -31,7 +31,7 @@ func (id DeltaMoney) MarshalJSON() ([]byte, error) {
 
 func (id *DeltaMoney) Scan(value interface{}) error {
 	switch value := value.(type) {
-	case float64:
+	case uint64:
 		id.value = value
 		return nil
 	default:
@@ -39,7 +39,7 @@ func (id *DeltaMoney) Scan(value interface{}) error {
 	}
 }
 
-func (id DeltaMoney) DeltaMoney() float64 {
+func (id DeltaMoney) DeltaMoney() uint64 {
 	return id.value
 }
 

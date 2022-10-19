@@ -14,6 +14,10 @@ const (
 )
 
 const (
-	ID      = "id: "
-	BALANCE = "balance: "
+	ID           = "id: "
+	BALANCE      = "balance: "
+	MONEY        = "money: "
+	SERVICE_ID   = "service_id: "
+	SERVICE_NAME = "service_name: "
+	PROCESS_ID   = "process_id: "
 )

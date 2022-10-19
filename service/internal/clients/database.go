@@ -54,13 +54,14 @@ func New(logger logger.Logger) DataBase {
 
 	conn, err := sqlx.Connect("mysql", source)
 	if err != nil {
-		//logger.Panic(err)
+		logger.Panic(err)
 	} else {
 		//conn.SetConnMaxIdleTime(5 * time.Second)
 		conn.SetConnMaxLifetime(60 * time.Second)
 		conn.SetMaxIdleConns(10)
 		conn.SetMaxOpenConns(10)
 	}
+	fmt.Println("Connect mysql")
 	return &dataBase{
 		db:     conn,
 		logger: logger,
