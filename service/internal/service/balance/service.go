@@ -10,6 +10,7 @@ import (
 type Balance interface {
 	Add(balance *models.BalanceFields) (sql.Result, error)
 	Pay(balance *models.BalanceFields) (sql.Result, error)
+	Confirm(balance *models.BalanceConfirmFields) (sql.Result, error)
 }
 
 type balance struct {
