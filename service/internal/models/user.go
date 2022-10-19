@@ -9,7 +9,7 @@ type UserAdd struct {
 	UserName string `json:"user_name"`
 }
 
-type BalanceFieldsAdd struct {
+type BalanceFields struct {
 	UserID vo.IntID `db:"user_id"`
 	//Type: 0 - списание, 1 - пополнение
 	Type        int           `db:"type"` //TODO добавить vo
@@ -17,9 +17,9 @@ type BalanceFieldsAdd struct {
 	ServiceID   vo.IntID      `db:"service_id"`
 	ServiceName vo.Name       `db:"service_name"`
 	ProcessID   vo.IntID      `db:"process_id"`
-	CreatedAt   int64   `db:"created_at"`
+	CreatedAt   int64         `db:"created_at"`
 }
-type BalanceAdd struct {
+type Balance struct {
 	UserID uint64 `json:"user_id"`
 	//Type: 0 - списание, 1 - пополнение
 	Type        int    `json:"type"`

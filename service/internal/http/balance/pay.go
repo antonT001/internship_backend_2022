@@ -11,7 +11,7 @@ import (
 	"user_balance/service/internal/vo"
 )
 
-func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
+func (u *balance) Pay(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
@@ -21,7 +21,7 @@ func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	BalanceIn, err := validateAdd(bodyBytes)
+	balancePayIn, err := validatePay(bodyBytes)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -30,7 +30,7 @@ func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = u.balanceService.Add(BalanceIn)
+	_, err = u.balanceService.Pay(balancePayIn)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -44,47 +44,47 @@ func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
 	}, http.StatusOK)
 }
 
-func validateAdd(bodyBytes []byte) (*models.BalanceFields, error) {
-	addIn := models.BalanceFields{}
-	add := models.Balance{}
+func validatePay(bodyBytes []byte) (*models.BalanceFields, error) {
+	payIn := models.BalanceFields{}
+	pay := models.Balance{}
 
-	err := json.Unmarshal(bodyBytes, &add)
+	err := json.Unmarshal(bodyBytes, &pay)
 	if err != nil {
 		return nil, fmt.Errorf(c.JSON_PARSE_ERROR)
 	}
-	fmt.Printf("add: %v\n", add)
+	fmt.Printf("pay: %v\n", pay)
 
-	userID, err := vo.ExamineIntID(add.UserID)
+	userID, err := vo.ExamineIntID(pay.UserID)
 	if err != nil {
 		return nil, fmt.Errorf(c.ID + err.Error())
 	}
-	addIn.UserID = userID
+	payIn.UserID = userID
 
-	addIn.Type = add.Type //TODO добавить vo
+	payIn.Type = pay.Type //TODO добавить vo
 
-	money, err := vo.ExamineDeltaMoney(add.Money)
+	money, err := vo.ExamineDeltaMoney(pay.Money)
 	if err != nil {
 		return nil, fmt.Errorf(c.MONEY + err.Error())
 	}
-	addIn.Money = money
+	payIn.Money = money
 
-	serviceID, err := vo.ExamineIntID(add.ServiceID)
+	serviceID, err := vo.ExamineIntID(pay.ServiceID)
 	if err != nil {
 		return nil, fmt.Errorf(c.SERVICE_ID + err.Error())
 	}
-	addIn.ServiceID = serviceID
+	payIn.ServiceID = serviceID
 
-	serviceMame, err := vo.ExamineName(add.ServiceName)
+	serviceMame, err := vo.ExamineName(pay.ServiceName)
 	if err != nil {
 		return nil, fmt.Errorf(c.SERVICE_NAME + err.Error())
 	}
-	addIn.ServiceName = *serviceMame
+	payIn.ServiceName = *serviceMame
 
-	processID, err := vo.ExamineIntID(add.ProcessID)
+	processID, err := vo.ExamineIntID(pay.ProcessID)
 	if err != nil {
 		return nil, fmt.Errorf(c.PROCESS_ID + err.Error())
 	}
-	addIn.ProcessID = processID
+	payIn.ProcessID = processID
 
-	return &addIn, nil
+	return &payIn, nil
 }
