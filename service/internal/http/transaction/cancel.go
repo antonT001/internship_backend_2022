@@ -1,4 +1,4 @@
-package balance
+package transaction
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ import (
 	"user_balance/service/internal/vo"
 )
 
-func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
+func (u *transaction) Cancel(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
@@ -21,7 +21,7 @@ func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	balanceIn, err := validateAdd(bodyBytes)
+	transactionCancelIn, err := validateCancel(bodyBytes)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -30,7 +30,7 @@ func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = u.balanceService.Add(balanceIn)
+	_, err = u.transactionService.Cancel(transactionCancelIn)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -44,47 +44,39 @@ func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
 	}, http.StatusOK)
 }
 
-func validateAdd(bodyBytes []byte) (*models.TransactionFields, error) {
-	addIn := models.TransactionFields{}
-	add := models.Transaction{}
+func validateCancel(bodyBytes []byte) (*models.TransactionConfirmFields, error) {
+	cancelIn := models.TransactionConfirmFields{}
+	cancel := models.TransactionConfirm{}
 
-	err := json.Unmarshal(bodyBytes, &add)
+	err := json.Unmarshal(bodyBytes, &cancel)
 	if err != nil {
 		return nil, fmt.Errorf(c.JSON_PARSE_ERROR)
 	}
-	fmt.Printf("add: %v\n", add)
+	fmt.Printf("cancel: %v\n", cancel)
 
-	userID, err := vo.ExamineIntID(add.UserID)
+	userID, err := vo.ExamineIntID(cancel.UserID)
 	if err != nil {
 		return nil, fmt.Errorf(c.ID + err.Error())
 	}
-	addIn.UserID = userID
+	cancelIn.UserID = userID
 
-	addIn.Type = add.Type //TODO добавить vo
-
-	money, err := vo.ExamineDeltaMoney(add.Money)
+	money, err := vo.ExamineDeltaMoney(cancel.Money)
 	if err != nil {
 		return nil, fmt.Errorf(c.MONEY + err.Error())
 	}
-	addIn.Money = money
+	cancelIn.Money = money
 
-	serviceID, err := vo.ExamineIntID(add.ServiceID)
+	serviceID, err := vo.ExamineIntID(cancel.ServiceID)
 	if err != nil {
 		return nil, fmt.Errorf(c.SERVICE_ID + err.Error())
 	}
-	addIn.ServiceID = serviceID
+	cancelIn.ServiceID = serviceID
 
-	serviceMame, err := vo.ExamineName(add.ServiceName)
-	if err != nil {
-		return nil, fmt.Errorf(c.SERVICE_NAME + err.Error())
-	}
-	addIn.ServiceName = *serviceMame
-
-	orderID, err := vo.ExamineIntID(add.OrderID)
+	orderID, err := vo.ExamineIntID(cancel.OrderID)
 	if err != nil {
 		return nil, fmt.Errorf(c.ORDER_ID + err.Error())
 	}
-	addIn.OrderID = orderID
+	cancelIn.OrderID = orderID
 
-	return &addIn, nil
+	return &cancelIn, nil
 }

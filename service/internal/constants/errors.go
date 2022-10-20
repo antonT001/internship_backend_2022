@@ -3,7 +3,7 @@ package constants
 const (
 	USER         = "user: "
 	HOLDING      = "holding: "
-	TRANSACTIONS = "transactions: "
+	TRANSACTIONS = "transaction: "
 )
 
 const (
@@ -19,5 +19,5 @@ const (
 	MONEY        = "money: "
 	SERVICE_ID   = "service_id: "
 	SERVICE_NAME = "service_name: "
-	PROCESS_ID   = "process_id: "
+	ORDER_ID     = "order_id: "
 )

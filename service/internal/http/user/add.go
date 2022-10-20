@@ -25,7 +25,7 @@ func (u *user) Add(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
-			Error:   helpers.StringPointer(c.USER + c.SERVICE_ERROR + err.Error()),
+			Error:   helpers.StringPointer(c.USER + c.VALIDATE_ERROR + err.Error()),
 		}, http.StatusBadRequest)
 		return
 	}

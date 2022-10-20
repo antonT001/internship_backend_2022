@@ -10,8 +10,10 @@ import (
 	"user_balance/service/internal/middlewares"
 	"user_balance/service/internal/repository"
 	balanceService "user_balance/service/internal/service/balance"
+	transactionService "user_balance/service/internal/service/transaction"
 	userService "user_balance/service/internal/service/user"
 
+	transactionHttp "user_balance/service/internal/http/transaction"
 	balanceHttp "user_balance/service/internal/http/balance"
 	userHttp "user_balance/service/internal/http/user"
 
@@ -27,9 +29,11 @@ func main() {
 
 	userService := userService.New(hub, logger)
 	balanceService := balanceService.New(hub, logger)
+	transactionService := transactionService.New(hub, logger)
 
 	userHandle := userHttp.New(userService, logger)
 	balanceHandle := balanceHttp.New(balanceService, logger)
+	transactionHandle := transactionHttp.New(transactionService, logger)
 
 	router := mux.NewRouter()
 	router.Use(commonMiddleware.Handle)
@@ -39,8 +43,11 @@ func main() {
 
 	balanceRouter := router.PathPrefix("/balance").Subrouter()
 	balanceRouter.HandleFunc("/add", balanceHandle.Add).Methods(http.MethodPost)
-	balanceRouter.HandleFunc("/pay", balanceHandle.Pay).Methods(http.MethodPost)
-	balanceRouter.HandleFunc("/confirm", balanceHandle.Confirm).Methods(http.MethodPost)
+
+	transactionRouter := router.PathPrefix("/transaction").Subrouter()
+	transactionRouter.HandleFunc("/pay", transactionHandle.Pay).Methods(http.MethodPost)
+	transactionRouter.HandleFunc("/confirm", transactionHandle.Confirm).Methods(http.MethodPost)
+	transactionRouter.HandleFunc("/cancel", transactionHandle.Cancel).Methods(http.MethodPost)
 
 	srv := &http.Server{
 		Handler:      router,

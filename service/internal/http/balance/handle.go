@@ -8,8 +8,6 @@ import (
 
 type Balance interface {
 	Add(w http.ResponseWriter, r *http.Request)
-	Pay(w http.ResponseWriter, r *http.Request)
-	Confirm(w http.ResponseWriter, r *http.Request)
 }
 
 type balance struct {

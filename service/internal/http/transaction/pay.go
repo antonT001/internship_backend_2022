@@ -1,4 +1,4 @@
-package balance
+package transaction
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ import (
 	"user_balance/service/internal/vo"
 )
 
-func (u *balance) Pay(w http.ResponseWriter, r *http.Request) {
+func (u *transaction) Pay(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
@@ -21,16 +21,16 @@ func (u *balance) Pay(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	balancePayIn, err := validatePay(bodyBytes)
+	transactionPayIn, err := validatePay(bodyBytes)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
-			Error:   helpers.StringPointer(c.BALANCE + c.SERVICE_ERROR + err.Error()),
+			Error:   helpers.StringPointer(c.BALANCE + c.VALIDATE_ERROR + err.Error()),
 		}, http.StatusBadRequest)
 		return
 	}
 
-	_, err = u.balanceService.Pay(balancePayIn)
+	_, err = u.transactionService.Pay(transactionPayIn)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -44,9 +44,9 @@ func (u *balance) Pay(w http.ResponseWriter, r *http.Request) {
 	}, http.StatusOK)
 }
 
-func validatePay(bodyBytes []byte) (*models.BalanceFields, error) {
-	payIn := models.BalanceFields{}
-	pay := models.Balance{}
+func validatePay(bodyBytes []byte) (*models.TransactionFields, error) {
+	payIn := models.TransactionFields{}
+	pay := models.Transaction{}
 
 	err := json.Unmarshal(bodyBytes, &pay)
 	if err != nil {
@@ -80,11 +80,11 @@ func validatePay(bodyBytes []byte) (*models.BalanceFields, error) {
 	}
 	payIn.ServiceName = *serviceMame
 
-	processID, err := vo.ExamineIntID(pay.ProcessID)
+	orderID, err := vo.ExamineIntID(pay.OrderID)
 	if err != nil {
-		return nil, fmt.Errorf(c.PROCESS_ID + err.Error())
+		return nil, fmt.Errorf(c.ORDER_ID + err.Error())
 	}
-	payIn.ProcessID = processID
+	payIn.OrderID = orderID
 
 	return &payIn, nil
 }

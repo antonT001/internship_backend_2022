@@ -7,9 +7,7 @@ import (
 )
 
 type Balance interface {
-	Add(balance *models.BalanceFields) (sql.Result, error)
-	Pay(balance *models.BalanceFields) (result sql.Result, err error)
-	Confirm(balance *models.BalanceConfirmFields) (sql.Result, error)
+	Add(balance *models.TransactionFields) (sql.Result, error)
 }
 
 type balance struct {

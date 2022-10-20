@@ -1,4 +1,4 @@
-package balance
+package transaction
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ import (
 	"user_balance/service/internal/vo"
 )
 
-func (u *balance) Confirm(w http.ResponseWriter, r *http.Request) {
+func (u *transaction) Confirm(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
@@ -21,16 +21,16 @@ func (u *balance) Confirm(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	balanceConfirmIn, err := validateConfirm(bodyBytes)
+	transactionConfirmIn, err := validateConfirm(bodyBytes)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
-			Error:   helpers.StringPointer(c.BALANCE + c.SERVICE_ERROR + err.Error()),
+			Error:   helpers.StringPointer(c.BALANCE + c.VALIDATE_ERROR + err.Error()),
 		}, http.StatusBadRequest)
 		return
 	}
 
-	_, err = u.balanceService.Confirm(balanceConfirmIn)
+	_, err = u.transactionService.Confirm(transactionConfirmIn)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -44,9 +44,9 @@ func (u *balance) Confirm(w http.ResponseWriter, r *http.Request) {
 	}, http.StatusOK)
 }
 
-func validateConfirm(bodyBytes []byte) (*models.BalanceConfirmFields, error) {
-	confirmIn := models.BalanceConfirmFields{}
-	confirm := models.Balance{}
+func validateConfirm(bodyBytes []byte) (*models.TransactionConfirmFields, error) {
+	confirmIn := models.TransactionConfirmFields{}
+	confirm := models.TransactionConfirm{}
 
 	err := json.Unmarshal(bodyBytes, &confirm)
 	if err != nil {
@@ -54,11 +54,29 @@ func validateConfirm(bodyBytes []byte) (*models.BalanceConfirmFields, error) {
 	}
 	fmt.Printf("confirm: %v\n", confirm)
 
-	processID, err := vo.ExamineIntID(confirm.ProcessID)
+	userID, err := vo.ExamineIntID(confirm.UserID)
 	if err != nil {
-		return nil, fmt.Errorf(c.PROCESS_ID + err.Error())
+		return nil, fmt.Errorf(c.ID + err.Error())
 	}
-	confirmIn.ProcessID = processID
+	confirmIn.UserID = userID
+
+	money, err := vo.ExamineDeltaMoney(confirm.Money)
+	if err != nil {
+		return nil, fmt.Errorf(c.MONEY + err.Error())
+	}
+	confirmIn.Money = money
+
+	serviceID, err := vo.ExamineIntID(confirm.ServiceID)
+	if err != nil {
+		return nil, fmt.Errorf(c.SERVICE_ID + err.Error())
+	}
+	confirmIn.ServiceID = serviceID
+
+	orderID, err := vo.ExamineIntID(confirm.OrderID)
+	if err != nil {
+		return nil, fmt.Errorf(c.ORDER_ID + err.Error())
+	}
+	confirmIn.OrderID = orderID
 
 	return &confirmIn, nil
 }
