@@ -23,18 +23,22 @@ type Transaction struct {
 }
 
 type TransactionConfirmFields struct {
-	UserID    vo.IntID      `db:"user_id"`
-	ServiceID vo.IntID      `db:"service_id"`
-	OrderID   vo.IntID      `db:"order_id"`
-	Money     vo.DeltaMoney `db:"money"`
-	Confirmed int64         `db:"confirmed"`
+	UserID      vo.IntID      `db:"user_id"`
+	ServiceID   vo.IntID      `db:"service_id"`
+	ServiceName vo.Name       `db:"service_name"`
+	OrderID     vo.IntID      `db:"order_id"`
+	Money       vo.DeltaMoney `db:"money"`
+	Confirmed   int64         `db:"confirmed"`
+	Month       int           `db:"month"`
+	Year        int           `db:"year"`
 }
 
 type TransactionConfirm struct {
-	UserID    uint64 `json:"user_id"`
-	ServiceID uint64 `json:"service_id"`
-	OrderID   uint64 `json:"order_id"`
-	Money     uint64 `json:"money"`
+	UserID      uint64 `json:"user_id"`
+	ServiceID   uint64 `json:"service_id"`
+	ServiceName string `json:"service_name"`
+	OrderID     uint64 `json:"order_id"`
+	Money       uint64 `json:"money"`
 }
 
 type TransactionListFields struct {

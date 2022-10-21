@@ -54,5 +54,13 @@ func (u *transaction) Confirm(input *models.TransactionConfirmFields) (result sq
 		return nil, fmt.Errorf("failed to transaction confirm:%v", err)
 	}
 
+	result, err = tx.NamedExec(`INSERT INTO accounting (month, year, service_id, service_name, money)
+	VALUES (:month, :year, :service_id, :service_name, :money) 
+		ON DUPLICATE KEY 
+	UPDATE money = money + VALUES(money)`, *input)
+	if err != nil {
+		return nil, fmt.Errorf("failed to add accounting data:%v", err)
+	}
+
 	return nil, tx.Commit()
 }
