@@ -3,7 +3,6 @@ package transaction
 import (
 	"database/sql"
 	"fmt"
-	"user_balance/service/internal/constants"
 	"user_balance/service/internal/models"
 )
 
@@ -21,30 +20,11 @@ func (u *transaction) Cancel(input *models.TransactionConfirmFields) (result sql
 		}
 	}()
 
-	var status int //TODO - повторяющийся кусок кода с service/internal/repository/balance/cancel.go
-	err = tx.Get(
-		&status,
-		`SELECT status FROM transactions 
-		WHERE user_id = ? AND service_id = ? AND order_id = ? AND money = ?`,
-		input.UserID,
-		input.ServiceID,
-		input.OrderID,
-		input.Money,
-	)
+	err = checkType(tx, input)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get transaction information:%v", err)
+		return nil, err
 	}
-	fmt.Printf("status: %v\n", status)
-	switch status {
-	case constants.STATUS_CANCEL:
-		return nil, fmt.Errorf("transaction has already been canceled")
-	case constants.STATUS_CONFIRM:
-		return nil, fmt.Errorf("transaction has already been confirmed")
-	case constants.STATUS_RESERVED:
-		/*...*/
-	default:
-		return nil, fmt.Errorf("unknown transaction status - %v", status)
-	}
+
 	result, err = tx.NamedExec(`UPDATE transactions
 	SET status=2, confirmed=:confirmed
 	WHERE order_id=:order_id	
