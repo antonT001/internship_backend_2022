@@ -41,3 +41,18 @@ type TransactionConfirm struct {
 	OrderID   uint64 `json:"order_id"`
 	Money     uint64 `json:"money"`
 }
+
+type BalanceFields struct {
+	UserID uint64 `db:"user_id"`
+	Money  uint64 `db:"money"`
+}
+
+type BalanceGetIn struct {
+	UserID uint64 `json:"user_id"`
+}
+
+type BalanceGetOut struct {
+	Success bool           `json:"success"`
+	Balance *BalanceFields `json:"balance,omitempty"`
+	Error   *string        `json:"error,omitempty"`
+}

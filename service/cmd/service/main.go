@@ -43,6 +43,7 @@ func main() {
 
 	balanceRouter := router.PathPrefix("/balance").Subrouter()
 	balanceRouter.HandleFunc("/add", balanceHandle.Add).Methods(http.MethodPost)
+	balanceRouter.HandleFunc("/get", balanceHandle.Get).Methods(http.MethodPost)
 
 	transactionRouter := router.PathPrefix("/transaction").Subrouter()
 	transactionRouter.HandleFunc("/pay", transactionHandle.Pay).Methods(http.MethodPost)
