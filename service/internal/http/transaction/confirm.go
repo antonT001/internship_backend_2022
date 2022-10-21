@@ -16,25 +16,25 @@ func (u *transaction) Confirm(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
-			Error:   helpers.StringPointer(c.BALANCE + c.SYSTEM_ERROR + err.Error()),
+			Error:   helpers.StringPointer(c.TRANSACTIONS + c.SYSTEM_ERROR + err.Error()),
 		}, http.StatusInternalServerError)
 
 		return
 	}
-	transactionConfirmIn, err := validateConfirm(bodyBytes)
+	input, err := validateConfirm(bodyBytes)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
-			Error:   helpers.StringPointer(c.BALANCE + c.VALIDATE_ERROR + err.Error()),
+			Error:   helpers.StringPointer(c.TRANSACTIONS + c.VALIDATE_ERROR + err.Error()),
 		}, http.StatusBadRequest)
 		return
 	}
 
-	_, err = u.transactionService.Confirm(transactionConfirmIn)
+	_, err = u.transactionService.Confirm(input)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
-			Error:   helpers.StringPointer(c.BALANCE + c.SERVICE_ERROR + err.Error()),
+			Error:   helpers.StringPointer(c.TRANSACTIONS + c.SERVICE_ERROR + err.Error()),
 		}, http.StatusForbidden)
 		return
 	}

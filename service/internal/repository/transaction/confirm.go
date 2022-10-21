@@ -7,7 +7,7 @@ import (
 	"user_balance/service/internal/models"
 )
 
-func (u *transaction) Confirm(transaction *models.TransactionConfirmFields) (result sql.Result, err error) {
+func (u *transaction) Confirm(input *models.TransactionConfirmFields) (result sql.Result, err error) {
 	result, err = u.db.Exec("LOCK TABLES transactions WRITE")
 	defer u.db.Exec("UNLOCK TABLES")
 	tx, _ := u.db.NewTransaction()
@@ -26,10 +26,10 @@ func (u *transaction) Confirm(transaction *models.TransactionConfirmFields) (res
 		&status,
 		`SELECT status FROM transactions 
 		WHERE user_id = ? AND service_id = ? AND order_id = ? AND money = ?`,
-		transaction.UserID,
-		transaction.ServiceID,
-		transaction.OrderID,
-		transaction.Money,
+		input.UserID,
+		input.ServiceID,
+		input.OrderID,
+		input.Money,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get transaction information:%v", err)
@@ -47,9 +47,9 @@ func (u *transaction) Confirm(transaction *models.TransactionConfirmFields) (res
 	}
 
 	_, err = tx.NamedExec(`UPDATE transactions
-	SET status=1, update_at=:update_at
+	SET status=1, confirmed=:confirmed
 	WHERE order_id=:order_id	
-	`, *transaction)
+	`, *input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to transaction confirm:%v", err)
 	}

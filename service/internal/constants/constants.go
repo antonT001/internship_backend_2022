@@ -1,8 +1,9 @@
 package constants
 
-const (
-	STATUS_RESERVED = 0
-	STATUS_CONFIRM = 1
-	STATUS_CANCEL = 2
+const RESPONSE_LIMIT_DB = 3
 
+const (
+	STATUS_RESERVED = iota
+	STATUS_CONFIRM
+	STATUS_CANCEL
 )

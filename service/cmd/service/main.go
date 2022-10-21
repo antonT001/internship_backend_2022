@@ -13,8 +13,8 @@ import (
 	transactionService "user_balance/service/internal/service/transaction"
 	userService "user_balance/service/internal/service/user"
 
-	transactionHttp "user_balance/service/internal/http/transaction"
 	balanceHttp "user_balance/service/internal/http/balance"
+	transactionHttp "user_balance/service/internal/http/transaction"
 	userHttp "user_balance/service/internal/http/user"
 
 	"github.com/gorilla/mux"
@@ -49,6 +49,7 @@ func main() {
 	transactionRouter.HandleFunc("/pay", transactionHandle.Pay).Methods(http.MethodPost)
 	transactionRouter.HandleFunc("/confirm", transactionHandle.Confirm).Methods(http.MethodPost)
 	transactionRouter.HandleFunc("/cancel", transactionHandle.Cancel).Methods(http.MethodPost)
+	transactionRouter.HandleFunc("/list", transactionHandle.List).Methods(http.MethodPost)
 
 	srv := &http.Server{
 		Handler:      router,

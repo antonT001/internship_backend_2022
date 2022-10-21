@@ -21,7 +21,7 @@ func (u *balance) Get(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	balanceIn, err := validateGet(bodyBytes)
+	input, err := validateGet(bodyBytes)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -30,7 +30,7 @@ func (u *balance) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	get, err := u.balanceService.Get(balanceIn)
+	get, err := u.balanceService.Get(input)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,

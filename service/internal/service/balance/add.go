@@ -7,8 +7,9 @@ import (
 	"user_balance/service/internal/models"
 )
 
-func (c *balance) Add(balance *models.TransactionFields) (sql.Result, error) {
-	balance.CreatedAt = time.Now().Unix()
+func (c *balance) Add(input *models.TransactionFields) (sql.Result, error) {
+	input.CreatedAt = time.Now().Unix()
+	input.Confirmed = input.CreatedAt
 	fmt.Println("service")
-	return c.hub.Balance().Add(balance)
+	return c.hub.Balance().Add(input)
 }

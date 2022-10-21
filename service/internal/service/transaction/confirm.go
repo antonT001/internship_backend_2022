@@ -7,8 +7,8 @@ import (
 	"user_balance/service/internal/models"
 )
 
-func (c *transaction) Confirm(transaction *models.TransactionConfirmFields) (sql.Result, error) {
-	transaction.UpdateAT = time.Now().Unix()
+func (c *transaction) Confirm(input *models.TransactionConfirmFields) (sql.Result, error) {
+	input.Confirmed = time.Now().Unix()
 	fmt.Println("service")
-	return c.hub.Transaction().Confirm(transaction)
+	return c.hub.Transaction().Confirm(input)
 }

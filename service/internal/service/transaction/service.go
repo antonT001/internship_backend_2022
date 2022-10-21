@@ -8,9 +8,10 @@ import (
 )
 
 type Transaction interface {
-	Pay(transaction *models.TransactionFields) (sql.Result, error)
-	Confirm(transaction *models.TransactionConfirmFields) (sql.Result, error)
-	Cancel(transaction *models.TransactionConfirmFields) (sql.Result, error)
+	Pay(input *models.TransactionFields) (sql.Result, error)
+	Confirm(input *models.TransactionConfirmFields) (sql.Result, error)
+	Cancel(input *models.TransactionConfirmFields) (sql.Result, error)
+	List(input *models.TransactionListIn) ([]models.TransactionListFields, error)
 }
 
 type transaction struct {

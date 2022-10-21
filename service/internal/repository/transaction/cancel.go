@@ -7,7 +7,7 @@ import (
 	"user_balance/service/internal/models"
 )
 
-func (u *transaction) Cancel(transaction *models.TransactionConfirmFields) (result sql.Result, err error) {
+func (u *transaction) Cancel(input *models.TransactionConfirmFields) (result sql.Result, err error) {
 	u.db.Exec("LOCK TABLES balance WRITE, transactions WRITE")
 	defer u.db.Exec("UNLOCK TABLES")
 	tx, _ := u.db.NewTransaction()
@@ -26,10 +26,10 @@ func (u *transaction) Cancel(transaction *models.TransactionConfirmFields) (resu
 		&status,
 		`SELECT status FROM transactions 
 		WHERE user_id = ? AND service_id = ? AND order_id = ? AND money = ?`,
-		transaction.UserID,
-		transaction.ServiceID,
-		transaction.OrderID,
-		transaction.Money,
+		input.UserID,
+		input.ServiceID,
+		input.OrderID,
+		input.Money,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get transaction information:%v", err)
@@ -46,9 +46,9 @@ func (u *transaction) Cancel(transaction *models.TransactionConfirmFields) (resu
 		return nil, fmt.Errorf("unknown transaction status - %v", status)
 	}
 	result, err = tx.NamedExec(`UPDATE transactions
-	SET status=2, update_at=:update_at
+	SET status=2, confirmed=:confirmed
 	WHERE order_id=:order_id	
-	`, *transaction)
+	`, *input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to transaction cancel:%v", err)
 	}
@@ -56,7 +56,7 @@ func (u *transaction) Cancel(transaction *models.TransactionConfirmFields) (resu
 	result, err = tx.NamedExec(`UPDATE balance
 	SET money = money + :money
 	WHERE user_id = :user_id	
-	`, transaction)
+	`, input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to return balance:%v", err)
 	}

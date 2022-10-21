@@ -9,7 +9,7 @@ import (
 )
 
 type Balance interface {
-	Add(balance *models.TransactionFields) (sql.Result, error)
+	Add(input *models.TransactionFields) (sql.Result, error)
 	Get(userId *vo.IntID) (*models.BalanceFields, error)
 }
 

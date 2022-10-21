@@ -10,11 +10,12 @@ type Transaction interface {
 	Pay(w http.ResponseWriter, r *http.Request)
 	Confirm(w http.ResponseWriter, r *http.Request)
 	Cancel(w http.ResponseWriter, r *http.Request)
+	List(w http.ResponseWriter, r *http.Request)
 }
 
 type transaction struct {
 	transactionService transactionService.Transaction
-	logger         logger.Logger
+	logger             logger.Logger
 }
 
 func New(transactionService transactionService.Transaction, logger logger.Logger) Transaction {

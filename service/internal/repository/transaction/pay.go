@@ -6,7 +6,7 @@ import (
 	"user_balance/service/internal/models"
 )
 
-func (u *transaction) Pay(transaction *models.TransactionFields) (result sql.Result, err error) {
+func (u *transaction) Pay(input *models.TransactionFields) (result sql.Result, err error) {
 	u.db.Exec("LOCK TABLES balance READ, transactions READ")
 	defer u.db.Exec("UNLOCK TABLES")
 	tx, _ := u.db.NewTransaction()
@@ -26,14 +26,14 @@ func (u *transaction) Pay(transaction *models.TransactionFields) (result sql.Res
 	err = tx.Get(
 		&summHold,
 		`SELECT money FROM balance WHERE user_id = ?`,
-		transaction.UserID)
+		input.UserID)
 
 	if err != nil {
 		return nil, err
 	}
 	fmt.Printf("summ: %v\n", summHold)
 	//сравниваем с суммой списания
-	if transaction.Money.DeltaMoney() > uint64(summHold) {
+	if input.Money.DeltaMoney() > uint64(summHold) {
 		return nil, fmt.Errorf("not enough money on balance")
 	}
 	//создаем заморозку, уменьшеаем баланс на эту сумму или возвращаем ошибру
@@ -41,7 +41,7 @@ func (u *transaction) Pay(transaction *models.TransactionFields) (result sql.Res
 	result, err = tx.NamedExec(`INSERT INTO transactions 
 	(user_id, service_id, service_name, order_id, type, money, created_at)
 	VALUES (:user_id, :service_id, :service_name, :order_id, :type, :money, :created_at)`,
-		*transaction)
+		*input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to add transaction:%v", err)
 	}
@@ -49,7 +49,7 @@ func (u *transaction) Pay(transaction *models.TransactionFields) (result sql.Res
 	result, err = tx.NamedExec(`UPDATE balance
 	SET money= money - :money
 	WHERE user_id = :user_id	
-	`, *transaction)
+	`, *input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to add balance:%v", err)
 	}

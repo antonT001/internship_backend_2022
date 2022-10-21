@@ -21,7 +21,7 @@ func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	balanceIn, err := validateAdd(bodyBytes)
+	input, err := validateAdd(bodyBytes)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -30,7 +30,7 @@ func (u *balance) Add(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = u.balanceService.Add(balanceIn)
+	_, err = u.balanceService.Add(input)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
