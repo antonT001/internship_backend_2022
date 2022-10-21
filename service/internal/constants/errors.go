@@ -1,7 +1,7 @@
 package constants
 
 const (
-	USER         = "user: "
+	ACCOUNTING   = "accounting: "
 	HOLDING      = "holding: "
 	TRANSACTIONS = "transaction: "
 )
@@ -15,6 +15,8 @@ const (
 
 const (
 	ID              = "id: "
+	MONTH           = "month: "
+	YEAR            = "year: "
 	BALANCE         = "balance: "
 	MONEY           = "money: "
 	SERVICE_ID      = "service_id: "

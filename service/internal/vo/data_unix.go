@@ -17,7 +17,7 @@ func ExamineDateUniix(value uint64) (DateUnix, error) {
 		err      error
 	)
 
-	if value > uint64(time.Now().Unix()) && value < 1192406400 { //1192406400 - 15 Oct 2007 00:00:00 GMT
+	if value > uint64(time.Now().Unix()) || value < 1192406400 { //1192406400 - 15 Oct 2007 00:00:00 GMT
 		err = fmt.Errorf("init timestamp error")
 	}
 	DateUnix.value = value

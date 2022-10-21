@@ -1,6 +1,7 @@
 package transaction
 
 import (
+	"fmt"
 	"strings"
 	"user_balance/service/internal/constants"
 	"user_balance/service/internal/models"
@@ -16,7 +17,7 @@ func (u *transaction) List(input *models.TransactionListIn) ([]models.Transactio
 		whereArgs...)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get transaction data: %v", err)
 	}
 
 	return transactionRows, nil

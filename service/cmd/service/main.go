@@ -9,13 +9,13 @@ import (
 	"user_balance/service/internal/logger"
 	"user_balance/service/internal/middlewares"
 	"user_balance/service/internal/repository"
+	accountingService "user_balance/service/internal/service/accounting"
 	balanceService "user_balance/service/internal/service/balance"
 	transactionService "user_balance/service/internal/service/transaction"
-	userService "user_balance/service/internal/service/user"
 
+	accountingHttp "user_balance/service/internal/http/accounting"
 	balanceHttp "user_balance/service/internal/http/balance"
 	transactionHttp "user_balance/service/internal/http/transaction"
-	userHttp "user_balance/service/internal/http/user"
 
 	"github.com/gorilla/mux"
 )
@@ -27,19 +27,19 @@ func main() {
 
 	commonMiddleware := middlewares.NewCommonMiddleware()
 
-	userService := userService.New(hub, logger)
+	accountingService := accountingService.New(hub, logger)
 	balanceService := balanceService.New(hub, logger)
 	transactionService := transactionService.New(hub, logger)
 
-	userHandle := userHttp.New(userService, logger)
+	accountingHandle := accountingHttp.New(accountingService, logger)
 	balanceHandle := balanceHttp.New(balanceService, logger)
 	transactionHandle := transactionHttp.New(transactionService, logger)
 
 	router := mux.NewRouter()
 	router.Use(commonMiddleware.Handle)
 
-	userRouter := router.PathPrefix("/user").Subrouter()
-	userRouter.HandleFunc("/add", userHandle.Add).Methods(http.MethodPost)
+	accountingRouter := router.PathPrefix("/accounting").Subrouter()
+	accountingRouter.HandleFunc("/list", accountingHandle.List).Methods(http.MethodPost)
 
 	balanceRouter := router.PathPrefix("/balance").Subrouter()
 	balanceRouter.HandleFunc("/add", balanceHandle.Add).Methods(http.MethodPost)
