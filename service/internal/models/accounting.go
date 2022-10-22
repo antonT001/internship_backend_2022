@@ -4,7 +4,7 @@ import "user_balance/service/internal/vo"
 
 type AccountingListFields struct {
 	Service_Name string `json:"service_name"`
-	Money        uint64 `json:"money"`
+	Money        int    `json:"money"`
 }
 
 type AccountingList struct {
@@ -18,7 +18,7 @@ type AccountingListIn struct {
 }
 
 type AccountingListOut struct {
-	Success    bool                   `json:"success"`
-	Accounting []AccountingListFields `json:"accounting_list,omitempty"`
-	Error      *string                `json:"error,omitempty"`
+	Success    bool    `json:"success"`
+	Accounting *string `json:"path,omitempty"`
+	Error      *string `json:"error,omitempty"`
 }

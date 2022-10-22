@@ -7,3 +7,9 @@ const (
 	STATUS_CONFIRM
 	STATUS_CANCEL
 )
+
+type key string
+
+const (
+	BASE_PATH key = "base_path"
+)

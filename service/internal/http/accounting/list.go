@@ -39,9 +39,12 @@ func (u *accounting) List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	ctx := r.Context()
+	path := ctx.Value(c.BASE_PATH).(string) + "/static" + *out
+
 	helpers.HttpResponse(w, models.AccountingListOut{
-		Success: true,
-		Accounting: out,
+		Success:    true,
+		Accounting: &path,
 	}, http.StatusOK)
 }
 

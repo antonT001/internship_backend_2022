@@ -1,8 +1,11 @@
 package middlewares
 
 import (
+	"context"
 	"fmt"
+	"net"
 	"net/http"
+	c "user_balance/service/internal/constants"
 )
 
 type CommonMiddleware interface {
@@ -28,6 +31,15 @@ func (m commonMiddleware) a(t func(w http.ResponseWriter, r *http.Request)) func
 				fmt.Printf("r: %v\n", r)
 			}
 		}()
+		host, port, _ := net.SplitHostPort(r.Host)
+		scheme := "https"
+		if r.TLS == nil {
+			scheme = "http"
+		}
+
+		ctx := context.WithValue(r.Context(), c.BASE_PATH, scheme+"://"+host+":"+port)
+
+		r = r.WithContext(ctx)
 		t(w, r)
 	}
 }
