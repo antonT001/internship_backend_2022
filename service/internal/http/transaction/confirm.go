@@ -11,6 +11,17 @@ import (
 	"user_balance/service/internal/vo"
 )
 
+// @Summary Confirm
+// @Tags transaction
+// @Description Transaction confirmation, debiting money in favor of the company
+// @Accept json
+// @Produce json
+// @Param input body models.TransactionConfirm true "payload"
+// @Success 200 {object} models.Out
+// @Failure 400 {object} models.Out
+// @Failure 403 {object} models.Out
+// @Failure 500 {object} models.Out
+// @Router /transaction/confirm [post]
 func (u *transaction) Confirm(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {

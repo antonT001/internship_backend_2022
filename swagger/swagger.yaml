@@ -1,9 +1,366 @@
 basePath: /
+definitions:
+  models.AccountingList:
+    properties:
+      month:
+        type: integer
+      year:
+        type: integer
+    type: object
+  models.AccountingListOut:
+    properties:
+      error:
+        type: string
+      path:
+        type: string
+      success:
+        type: boolean
+    type: object
+  models.BalanceFields:
+    properties:
+      money:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.BalanceGetIn:
+    properties:
+      user_id:
+        type: integer
+    type: object
+  models.BalanceGetOut:
+    properties:
+      balance:
+        $ref: '#/definitions/models.BalanceFields'
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
+  models.Out:
+    properties:
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
+  models.Transaction:
+    properties:
+      money:
+        type: integer
+      order_id:
+        type: integer
+      service_id:
+        type: integer
+      service_name:
+        type: string
+      type:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.TransactionConfirm:
+    properties:
+      money:
+        type: integer
+      order_id:
+        type: integer
+      service_id:
+        type: integer
+      service_name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.TransactionFilter:
+    properties:
+      order_by:
+        type: string
+      order_direction:
+        type: string
+    type: object
+  models.TransactionList:
+    properties:
+      filter:
+        $ref: '#/definitions/models.TransactionFilter'
+      page_num:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.TransactionListFields:
+    properties:
+      confirmed:
+        type: integer
+      id:
+        type: integer
+      money:
+        type: integer
+      order_id:
+        type: integer
+      service_id:
+        type: integer
+      service_name:
+        type: string
+      type:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.TransactionListOut:
+    properties:
+      error:
+        type: string
+      success:
+        type: boolean
+      transaction_list:
+        items:
+          $ref: '#/definitions/models.TransactionListFields'
+        type: array
+    type: object
 host: localhost:9000
 info:
   contact: {}
   description: API Server for Internship_backend_2022 Application
   title: Internship_backend_2022 API
   version: "1.0"
-paths: {}
+paths:
+  /accounting/list:
+    post:
+      consumes:
+      - application/json
+      description: Get list from report
+      parameters:
+      - description: payload
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.AccountingList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AccountingListOut'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Out'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.Out'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Out'
+      summary: List
+      tags:
+      - accounting
+  /balance/add:
+    post:
+      consumes:
+      - application/json
+      description: Add user balance
+      parameters:
+      - description: payload
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Transaction'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Out'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Out'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.Out'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Out'
+      summary: Add
+      tags:
+      - balance
+  /balance/get:
+    post:
+      consumes:
+      - application/json
+      description: Get user balance
+      parameters:
+      - description: payload
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.BalanceGetIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BalanceGetOut'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Out'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.Out'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Out'
+      summary: Get
+      tags:
+      - balance
+  /transaction/add:
+    post:
+      consumes:
+      - application/json
+      description: Add transaction, freeze user's money
+      parameters:
+      - description: payload
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Transaction'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Out'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Out'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.Out'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Out'
+      summary: Add
+      tags:
+      - transaction
+  /transaction/cancel:
+    post:
+      consumes:
+      - application/json
+      description: Cancellation of the transaction, return money to the balance
+      parameters:
+      - description: payload
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.TransactionConfirm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Out'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Out'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.Out'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Out'
+      summary: Cancel
+      tags:
+      - transaction
+  /transaction/confirm:
+    post:
+      consumes:
+      - application/json
+      description: Transaction confirmation, debiting money in favor of the company
+      parameters:
+      - description: payload
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.TransactionConfirm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Out'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Out'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.Out'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Out'
+      summary: Confirm
+      tags:
+      - transaction
+  /transaction/list:
+    post:
+      consumes:
+      - application/json
+      description: Get a list of user transactions
+      parameters:
+      - description: payload
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.TransactionList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TransactionListOut'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Out'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.Out'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Out'
+      summary: List
+      tags:
+      - transaction
 swagger: "2.0"

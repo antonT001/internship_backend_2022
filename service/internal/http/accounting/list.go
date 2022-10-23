@@ -11,9 +11,9 @@ import (
 	"user_balance/service/internal/vo"
 )
 
-// List godoc
+
 // @Summary List
-// @Tags Accounting
+// @Tags accounting
 // @Description Get list from report
 // @Accept json
 // @Produce json
@@ -23,7 +23,6 @@ import (
 // @Failure 403 {object} models.Out
 // @Failure 500 {object} models.Out
 // @Router /accounting/list [post]
-
 func (u *accounting) List(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {

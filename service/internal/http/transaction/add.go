@@ -11,7 +11,18 @@ import (
 	"user_balance/service/internal/vo"
 )
 
-func (u *transaction) Pay(w http.ResponseWriter, r *http.Request) {
+// @Summary Add
+// @Tags transaction
+// @Description Add transaction, freeze user's money
+// @Accept json
+// @Produce json
+// @Param input body models.Transaction{} true "payload"
+// @Success 200 {object} models.Out
+// @Failure 400 {object} models.Out
+// @Failure 403 {object} models.Out
+// @Failure 500 {object} models.Out
+// @Router /transaction/add [post]
+func (u *transaction) Add(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
@@ -21,7 +32,7 @@ func (u *transaction) Pay(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	input, err := validatePay(bodyBytes)
+	input, err := validateAdd(bodyBytes)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -30,7 +41,7 @@ func (u *transaction) Pay(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = u.transactionService.Pay(input)
+	_, err = u.transactionService.Add(input)
 	if err != nil {
 		helpers.HttpResponse(w, models.Out{
 			Success: false,
@@ -44,47 +55,47 @@ func (u *transaction) Pay(w http.ResponseWriter, r *http.Request) {
 	}, http.StatusOK)
 }
 
-func validatePay(bodyBytes []byte) (*models.TransactionFields, error) {
-	payIn := models.TransactionFields{}
-	pay := models.Transaction{}
+func validateAdd(bodyBytes []byte) (*models.TransactionFields, error) {
+	addIn := models.TransactionFields{}
+	add := models.Transaction{}
 
-	err := json.Unmarshal(bodyBytes, &pay)
+	err := json.Unmarshal(bodyBytes, &add)
 	if err != nil {
 		return nil, fmt.Errorf(c.JSON_PARSE_ERROR)
 	}
-	fmt.Printf("pay: %v\n", pay)
+	fmt.Printf("add: %v\n", add)
 
-	userID, err := vo.ExamineIntID(pay.UserID)
+	userID, err := vo.ExamineIntID(add.UserID)
 	if err != nil {
 		return nil, fmt.Errorf(c.ID + err.Error())
 	}
-	payIn.UserID = userID
+	addIn.UserID = userID
 
-	payIn.Type = pay.Type //TODO добавить vo
+	addIn.Type = add.Type //TODO добавить vo
 
-	money, err := vo.ExamineDeltaMoney(pay.Money)
+	money, err := vo.ExamineDeltaMoney(add.Money)
 	if err != nil {
 		return nil, fmt.Errorf(c.MONEY + err.Error())
 	}
-	payIn.Money = money
+	addIn.Money = money
 
-	serviceID, err := vo.ExamineIntID(pay.ServiceID)
+	serviceID, err := vo.ExamineIntID(add.ServiceID)
 	if err != nil {
 		return nil, fmt.Errorf(c.SERVICE_ID + err.Error())
 	}
-	payIn.ServiceID = serviceID
+	addIn.ServiceID = serviceID
 
-	serviceMame, err := vo.ExamineName(pay.ServiceName)
+	serviceMame, err := vo.ExamineName(add.ServiceName)
 	if err != nil {
 		return nil, fmt.Errorf(c.SERVICE_NAME + err.Error())
 	}
-	payIn.ServiceName = *serviceMame
+	addIn.ServiceName = *serviceMame
 
-	orderID, err := vo.ExamineIntID(pay.OrderID)
+	orderID, err := vo.ExamineIntID(add.OrderID)
 	if err != nil {
 		return nil, fmt.Errorf(c.ORDER_ID + err.Error())
 	}
-	payIn.OrderID = orderID
+	addIn.OrderID = orderID
 
-	return &payIn, nil
+	return &addIn, nil
 }

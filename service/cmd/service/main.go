@@ -60,7 +60,7 @@ func main() {
 	balanceRouter.HandleFunc("/get", balanceHandle.Get).Methods(http.MethodPost)
 
 	transactionRouter := router.PathPrefix("/transaction").Subrouter()
-	transactionRouter.HandleFunc("/pay", transactionHandle.Pay).Methods(http.MethodPost)
+	transactionRouter.HandleFunc("/add", transactionHandle.Add).Methods(http.MethodPost)
 	transactionRouter.HandleFunc("/confirm", transactionHandle.Confirm).Methods(http.MethodPost)
 	transactionRouter.HandleFunc("/cancel", transactionHandle.Cancel).Methods(http.MethodPost)
 	transactionRouter.HandleFunc("/list", transactionHandle.List).Methods(http.MethodPost)

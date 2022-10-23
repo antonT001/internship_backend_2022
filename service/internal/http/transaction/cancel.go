@@ -11,6 +11,17 @@ import (
 	"user_balance/service/internal/vo"
 )
 
+// @Summary Cancel
+// @Tags transaction
+// @Description Cancellation of the transaction, return money to the balance
+// @Accept json
+// @Produce json
+// @Param input body models.TransactionConfirm true "payload"
+// @Success 200 {object} models.Out
+// @Failure 400 {object} models.Out
+// @Failure 403 {object} models.Out
+// @Failure 500 {object} models.Out
+// @Router /transaction/cancel [post]
 func (u *transaction) Cancel(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {

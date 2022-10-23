@@ -11,6 +11,17 @@ import (
 	"user_balance/service/internal/vo"
 )
 
+// @Summary List
+// @Tags transaction
+// @Description Get a list of user transactions
+// @Accept json
+// @Produce json
+// @Param input body models.TransactionList{} true "payload"
+// @Success 200 {object} models.TransactionListOut
+// @Failure 400 {object} models.Out
+// @Failure 403 {object} models.Out
+// @Failure 500 {object} models.Out
+// @Router /transaction/list [post]
 func (u *transaction) List(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {

@@ -7,7 +7,7 @@ import (
 )
 
 type Transaction interface {
-	Pay(w http.ResponseWriter, r *http.Request)
+	Add(w http.ResponseWriter, r *http.Request)
 	Confirm(w http.ResponseWriter, r *http.Request)
 	Cancel(w http.ResponseWriter, r *http.Request)
 	List(w http.ResponseWriter, r *http.Request)

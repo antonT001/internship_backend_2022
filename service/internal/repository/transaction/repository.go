@@ -9,7 +9,7 @@ import (
 )
 
 type Transaction interface {
-	Pay(input *models.TransactionFields) (result sql.Result, err error)
+	Add(input *models.TransactionFields) (result sql.Result, err error)
 	Confirm(input *models.TransactionConfirmFields) (sql.Result, error)
 	Cancel(input *models.TransactionConfirmFields) (result sql.Result, err error)
 	List(input *models.TransactionListIn) ([]models.TransactionListFields, error)

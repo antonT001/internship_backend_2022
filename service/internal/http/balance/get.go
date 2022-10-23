@@ -11,6 +11,17 @@ import (
 	"user_balance/service/internal/vo"
 )
 
+// @Summary Get
+// @Tags balance
+// @Description Get user balance
+// @Accept json
+// @Produce json
+// @Param input body models.BalanceGetIn true "payload"
+// @Success 200 {object} models.BalanceGetOut
+// @Failure 400 {object} models.Out
+// @Failure 403 {object} models.Out
+// @Failure 500 {object} models.Out
+// @Router /balance/get [post]
 func (u *balance) Get(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {

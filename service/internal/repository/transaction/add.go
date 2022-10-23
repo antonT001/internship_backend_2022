@@ -6,7 +6,7 @@ import (
 	"user_balance/service/internal/models"
 )
 
-func (u *transaction) Pay(input *models.TransactionFields) (result sql.Result, err error) {
+func (u *transaction) Add(input *models.TransactionFields) (result sql.Result, err error) {
 	u.db.Exec("LOCK TABLES balance READ, transactions READ")
 	defer u.db.Exec("UNLOCK TABLES")
 	tx, _ := u.db.NewTransaction()
