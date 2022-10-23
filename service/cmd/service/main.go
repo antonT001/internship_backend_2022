@@ -19,8 +19,18 @@ import (
 	balanceHttp "user_balance/service/internal/http/balance"
 	transactionHttp "user_balance/service/internal/http/transaction"
 
+	_ "user_balance/swagger"
+
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
+
+// @title           Internship_backend_2022 API
+// @version         1.0
+// @description     API Server for Internship_backend_2022 Application
+
+// @host      localhost:9000
+// @BasePath  /
 
 func main() {
 	logger := logger.New()
@@ -56,6 +66,7 @@ func main() {
 	transactionRouter.HandleFunc("/list", transactionHandle.List).Methods(http.MethodPost)
 
 	router.PathPrefix("/static").HandlerFunc(fileServerHandle.Handle)
+	router.PathPrefix("/swagger/").HandlerFunc(httpSwagger.WrapHandler)
 
 	srv := &http.Server{
 		Handler:      router,

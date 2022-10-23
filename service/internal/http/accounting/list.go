@@ -11,6 +11,19 @@ import (
 	"user_balance/service/internal/vo"
 )
 
+// List godoc
+// @Summary List
+// @Tags Accounting
+// @Description Get list from report
+// @Accept json
+// @Produce json
+// @Param input body models.AccountingList true "payload"
+// @Success 200 {object} models.AccountingListOut
+// @Failure 400 {object} models.Out
+// @Failure 403 {object} models.Out
+// @Failure 500 {object} models.Out
+// @Router /accounting/list [post]
+
 func (u *accounting) List(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
