@@ -10,3 +10,6 @@ docker/mysql.env
 
 # VSC IDE
 .vscode
+
+# Binary
+/bin
