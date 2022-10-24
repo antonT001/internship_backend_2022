@@ -5,7 +5,7 @@ if [ ! "$(ls -A /var/lib/mysql)" ]; then
 fi
 
 /etc/init.d/mysql start
-/usr/bin/mysqladmin -u root password 'htDjPlfaOyD3x1wh'
+/usr/bin/mysqladmin -u root -h `hostname` password 'htDjPlfaOyD3x1wh'
 
 mysql -u root -phtDjPlfaOyD3x1wh -e "CREATE DATABASE user_balance CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
 mysql -u root -phtDjPlfaOyD3x1wh -e "CREATE USER 'user_balance'@'%' IDENTIFIED BY '1QcD6VOqlbJntYDe'"
