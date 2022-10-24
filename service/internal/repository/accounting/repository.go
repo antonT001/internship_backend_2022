@@ -1,5 +1,7 @@
 package accounting
 
+//go:generate ../../../../bin/mockery --name=Accounting --case underscore
+
 import (
 	"user_balance/service/internal/clients"
 	"user_balance/service/internal/models"

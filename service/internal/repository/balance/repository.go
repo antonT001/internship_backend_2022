@@ -1,5 +1,7 @@
 package balance
 
+//go:generate ../../../../bin/mockery --name=Balance --case underscore
+
 import (
 	"database/sql"
 	"user_balance/service/internal/clients"

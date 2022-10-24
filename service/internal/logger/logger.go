@@ -1,5 +1,7 @@
 package logger
 
+//go:generate ../../../bin/mockery --name=Logger --case underscore
+
 import (
 	"fmt"
 )

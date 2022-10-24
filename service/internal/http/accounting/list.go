@@ -41,6 +41,7 @@ func (u *accounting) List(w http.ResponseWriter, r *http.Request) {
 		}, http.StatusBadRequest)
 		return
 	}
+	
 
 	out, err := u.accountingService.List(input)
 	if err != nil {
@@ -53,6 +54,8 @@ func (u *accounting) List(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 	path := ctx.Value(c.BASE_PATH).(string) + "/static" + *out
+
+	fmt.Printf("path: %v\n", path)
 
 	helpers.HttpResponse(w, models.AccountingListOut{
 		Success:    true,
@@ -68,6 +71,7 @@ func validateList(bodyBytes []byte) (*models.AccountingListIn, error) {
 	if err != nil {
 		return nil, fmt.Errorf(c.JSON_PARSE_ERROR)
 	}
+	fmt.Printf("list: %v\n", list)
 
 	month, err := vo.ExamineMonth(list.Month)
 	if err != nil {

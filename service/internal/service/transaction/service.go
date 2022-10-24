@@ -1,5 +1,7 @@
 package transaction
 
+//go:generate ../../../../bin/mockery --name=Transaction --case underscore
+
 import (
 	"database/sql"
 	"user_balance/service/internal/logger"
