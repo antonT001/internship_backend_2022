@@ -386,10 +386,14 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "month": {
-                    "type": "integer"
+                    "description": "Month:\n* 1 - 12",
+                    "type": "integer",
+                    "example": 10
                 },
                 "year": {
-                    "type": "integer"
+                    "description": "Year:\n* 2007 - this year",
+                    "type": "integer",
+                    "example": 2022
                 }
             }
         },
@@ -400,7 +404,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "path": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "http://localhost:9000/static/2022/10/report102022.csv"
                 },
                 "success": {
                     "type": "boolean"
@@ -411,10 +416,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "money": {
+                    "description": "Money:\n* The format of money without kopecks is used.\n* Example 12050=120 rubles 50 kopecks",
                     "type": "integer"
                 },
                 "user_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 }
             }
         },
@@ -422,7 +429,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "user_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 }
             }
         },
@@ -455,22 +463,31 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "money": {
+                    "description": "Money:\n* The format of money without kopecks is used.\n* Example 12050=120 rubles 50 kopecks",
                     "type": "integer"
                 },
                 "order_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 },
                 "service_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 },
                 "service_name": {
                     "type": "string"
                 },
                 "type": {
-                    "type": "integer"
+                    "description": "Type transaction:\n* 0 - withdrawal of money from the user's account\n* 1 - receipt of money on the user's account",
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
                 },
                 "user_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 }
             }
         },
@@ -478,19 +495,23 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "money": {
+                    "description": "Money:\n* The format of money without kopecks is used.\n* Example 12050=120 rubles 50 kopecks",
                     "type": "integer"
                 },
                 "order_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 },
                 "service_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 },
                 "service_name": {
                     "type": "string"
                 },
                 "user_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 }
             }
         },
@@ -498,10 +519,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "order_by": {
-                    "type": "string"
+                    "description": "Sortable field\n* confirmed - data confirmed transaction\n* money - transaction money amount",
+                    "type": "string",
+                    "enum": [
+                        "confirmed",
+                        "money"
+                    ]
                 },
                 "order_direction": {
-                    "type": "string"
+                    "description": "Sort order:\n* ASC - Ascending, from A to Z.\n* DESC - Descending, from Z to A.",
+                    "type": "string",
+                    "enum": [
+                        "ASC",
+                        "DESC"
+                    ]
                 }
             }
         },
@@ -512,6 +543,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.TransactionFilter"
                 },
                 "page_num": {
+                    "description": "Pagination:\n* default page number = 0, the first n lines from the list are displayed.\n* If page number =1 then the following n lines are displayed\n* where n is a constant declared in the constants package - RESPONSE_LIMIT_DB",
                     "type": "integer"
                 },
                 "user_id": {
@@ -529,6 +561,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "money": {
+                    "description": "Money:\n* The format of money without kopecks is used.\n* Example 12050=120 rubles 50 kopecks",
                     "type": "integer"
                 },
                 "order_id": {
@@ -541,7 +574,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "type": "integer"
+                    "description": "Type transaction:\n* 0 - withdrawal of money from the user's account\n* 1 - receipt of money on the user's account",
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
                 },
                 "user_id": {
                     "type": "integer"

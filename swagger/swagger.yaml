@@ -3,8 +3,16 @@ definitions:
   models.AccountingList:
     properties:
       month:
+        description: |-
+          Month:
+          * 1 - 12
+        example: 10
         type: integer
       year:
+        description: |-
+          Year:
+          * 2007 - this year
+        example: 2022
         type: integer
     type: object
   models.AccountingListOut:
@@ -12,6 +20,7 @@ definitions:
       error:
         type: string
       path:
+        example: http://localhost:9000/static/2022/10/report102022.csv
         type: string
       success:
         type: boolean
@@ -19,13 +28,19 @@ definitions:
   models.BalanceFields:
     properties:
       money:
+        description: |-
+          Money:
+          * The format of money without kopecks is used.
+          * Example 12050=120 rubles 50 kopecks
         type: integer
       user_id:
+        example: 123
         type: integer
     type: object
   models.BalanceGetIn:
     properties:
       user_id:
+        example: 123
         type: integer
     type: object
   models.BalanceGetOut:
@@ -47,36 +62,71 @@ definitions:
   models.Transaction:
     properties:
       money:
+        description: |-
+          Money:
+          * The format of money without kopecks is used.
+          * Example 12050=120 rubles 50 kopecks
         type: integer
       order_id:
+        example: 123
         type: integer
       service_id:
+        example: 123
         type: integer
       service_name:
         type: string
       type:
+        description: |-
+          Type transaction:
+          * 0 - withdrawal of money from the user's account
+          * 1 - receipt of money on the user's account
+        enum:
+        - 0
+        - 1
         type: integer
       user_id:
+        example: 123
         type: integer
     type: object
   models.TransactionConfirm:
     properties:
       money:
+        description: |-
+          Money:
+          * The format of money without kopecks is used.
+          * Example 12050=120 rubles 50 kopecks
         type: integer
       order_id:
+        example: 123
         type: integer
       service_id:
+        example: 123
         type: integer
       service_name:
         type: string
       user_id:
+        example: 123
         type: integer
     type: object
   models.TransactionFilter:
     properties:
       order_by:
+        description: |-
+          Sortable field
+          * confirmed - data confirmed transaction
+          * money - transaction money amount
+        enum:
+        - confirmed
+        - money
         type: string
       order_direction:
+        description: |-
+          Sort order:
+          * ASC - Ascending, from A to Z.
+          * DESC - Descending, from Z to A.
+        enum:
+        - ASC
+        - DESC
         type: string
     type: object
   models.TransactionList:
@@ -84,6 +134,11 @@ definitions:
       filter:
         $ref: '#/definitions/models.TransactionFilter'
       page_num:
+        description: |-
+          Pagination:
+          * default page number = 0, the first n lines from the list are displayed.
+          * If page number =1 then the following n lines are displayed
+          * where n is a constant declared in the constants package - RESPONSE_LIMIT_DB
         type: integer
       user_id:
         type: integer
@@ -95,6 +150,10 @@ definitions:
       id:
         type: integer
       money:
+        description: |-
+          Money:
+          * The format of money without kopecks is used.
+          * Example 12050=120 rubles 50 kopecks
         type: integer
       order_id:
         type: integer
@@ -103,6 +162,13 @@ definitions:
       service_name:
         type: string
       type:
+        description: |-
+          Type transaction:
+          * 0 - withdrawal of money from the user's account
+          * 1 - receipt of money on the user's account
+        enum:
+        - 0
+        - 1
         type: integer
       user_id:
         type: integer

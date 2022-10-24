@@ -14,12 +14,18 @@ type TransactionFields struct {
 }
 
 type Transaction struct {
-	UserID      uint64 `json:"user_id"`
-	Type        int    `json:"type"`
+	UserID uint64 `json:"user_id" example:"123"`
+	// Type transaction:
+	// * 0 - withdrawal of money from the user's account
+	// * 1 - receipt of money on the user's account
+	Type int `json:"type" enums:"0,1"`
+	// Money:
+	// * The format of money without kopecks is used.
+	// * Example 12050=120 rubles 50 kopecks
 	Money       uint64 `json:"money"`
-	ServiceID   uint64 `json:"service_id"`
+	ServiceID   uint64 `json:"service_id" example:"123"`
 	ServiceName string `json:"service_name"`
-	OrderID     uint64 `json:"order_id"`
+	OrderID     uint64 `json:"order_id" example:"123"`
 }
 
 type TransactionConfirmFields struct {
@@ -34,11 +40,14 @@ type TransactionConfirmFields struct {
 }
 
 type TransactionConfirm struct {
-	UserID      uint64 `json:"user_id"`
-	ServiceID   uint64 `json:"service_id"`
+	UserID      uint64 `json:"user_id" example:"123"`
+	ServiceID   uint64 `json:"service_id" example:"123"`
 	ServiceName string `json:"service_name"`
-	OrderID     uint64 `json:"order_id"`
-	Money       uint64 `json:"money"`
+	OrderID     uint64 `json:"order_id" example:"123"`
+	// Money:
+	// * The format of money without kopecks is used.
+	// * Example 12050=120 rubles 50 kopecks
+	Money uint64 `json:"money"`
 }
 
 type TransactionListFields struct {
@@ -47,17 +56,33 @@ type TransactionListFields struct {
 	Service_ID   uint64 `json:"service_id"`
 	Service_Name string `json:"service_name"`
 	Order_ID     uint64 `json:"order_id"`
-	Type         int    `json:"type"`
-	Money        uint64 `json:"money"`
-	Confirmed    int64  `json:"confirmed"`
+	// Type transaction:
+	// * 0 - withdrawal of money from the user's account
+	// * 1 - receipt of money on the user's account
+	Type int `json:"type" enums:"0,1"`
+	// Money:
+	// * The format of money without kopecks is used.
+	// * Example 12050=120 rubles 50 kopecks
+	Money     uint64 `json:"money"`
+	Confirmed int64  `json:"confirmed"`
 }
 
 type TransactionFilter struct {
-	OrderBy        string `json:"order_by"`
-	OrderDirection string `json:"order_direction"`
+	// Sortable field
+	// * confirmed - data confirmed transaction
+	// * money - transaction money amount
+	OrderBy string `json:"order_by" enums:"confirmed,money"`
+	// Sort order:
+	// * ASC - Ascending, from A to Z.
+	// * DESC - Descending, from Z to A.
+	OrderDirection string `json:"order_direction" enums:"ASC,DESC"`
 }
 
 type TransactionList struct {
+	// Pagination:
+	// * default page number = 0, the first n lines from the list are displayed.
+	// * If page number =1 then the following n lines are displayed
+	// * where n is a constant declared in the constants package - RESPONSE_LIMIT_DB
 	PageNum *uint64            `json:"page_num"`
 	UserID  uint64             `json:"user_id"`
 	Filter  *TransactionFilter `json:"filter"`
