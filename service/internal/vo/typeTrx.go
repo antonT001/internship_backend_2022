@@ -18,7 +18,7 @@ func ExamineTypeTrx(value uint64) (TypeTrx, error) {
 
 	id.value = value
 
-	if id.value > 3 {
+	if id.value > 1 {
 		err = fmt.Errorf("type transaction error")
 	}
 
