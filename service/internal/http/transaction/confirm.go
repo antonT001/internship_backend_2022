@@ -85,7 +85,7 @@ func validateConfirm(bodyBytes []byte) (*models.TransactionConfirmFields, error)
 
 	serviceName, err := vo.ExamineName(confirm.ServiceName)
 	if err != nil {
-		return nil, fmt.Errorf(c.SERVICE_ID + err.Error())
+		return nil, fmt.Errorf(c.SERVICE_NAME + err.Error())
 	}
 	confirmIn.ServiceName = *serviceName
 

@@ -4,7 +4,7 @@ import "user_balance/service/internal/vo"
 
 type TransactionFields struct {
 	UserID      vo.IntID      `db:"user_id"`
-	Type        int           `db:"type"` //TODO добавить vo, Type: 0 - списание, 1 - пополнение
+	Type        vo.TypeTrx    `db:"type"`
 	Money       vo.DeltaMoney `db:"money"`
 	ServiceID   vo.IntID      `db:"service_id"`
 	ServiceName vo.Name       `db:"service_name"`
@@ -18,7 +18,7 @@ type Transaction struct {
 	// Type transaction:
 	// * 0 - withdrawal of money from the user's account
 	// * 1 - receipt of money on the user's account
-	Type int `json:"type" enums:"0,1"`
+	Type uint64 `json:"type" enums:"0,1"`
 	// Money:
 	// * The format of money without kopecks is used.
 	// * Example 12050=120 rubles 50 kopecks
@@ -59,7 +59,7 @@ type TransactionListFields struct {
 	// Type transaction:
 	// * 0 - withdrawal of money from the user's account
 	// * 1 - receipt of money on the user's account
-	Type int `json:"type" enums:"0,1"`
+	Type  uint64 `json:"type" enums:"0,1"`
 	// Money:
 	// * The format of money without kopecks is used.
 	// * Example 12050=120 rubles 50 kopecks

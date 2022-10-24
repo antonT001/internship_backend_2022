@@ -53,15 +53,8 @@ func Test_accounting_List(t *testing.T) {
 		expectedError   *string
 	}{
 		{
-			name: "validate",
-			r: request(`{
-				"money": 10,
-				"order_id": 12345,
-				"service_id": 5,
-				"service_name": "test",
-				"type": 0,
-				"user_id": 10}
-			`),
+			name:            "validate",
+			r:               request(`{}`),
 			expectedSuccess: true,
 			expectedCode:    200,
 			expectedError:   nil,
@@ -74,7 +67,6 @@ func Test_accounting_List(t *testing.T) {
 
 	userId, _ := vo.ExamineIntID(10)
 	input.UserID = userId
-	input.Type = 0 //TODO добавить vo, Type: 0 - списание, 1 - пополнение
 	money, _ := vo.ExamineDeltaMoney(10)
 	input.Money = money
 	serviceID, _ := vo.ExamineIntID(5)
@@ -85,29 +77,13 @@ func Test_accounting_List(t *testing.T) {
 	input.OrderID = orderID
 
 	mockBalance.On("Add", input).Return(nil, nil).Once()
+	u := h.New(mockBalance, mockLogger)
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u := h.New(mockBalance, mockLogger)
 			u.Add(&w, tt.r)
 			assert.Equal(tt.expectedSuccess, w.body.Success)
 			assert.Equal(tt.expectedCode, w.statusCode)
-			if tt.expectedError != nil {
-				if w.body.Error == nil {
-					t.Error("expectedError != nil, but error == nil")
-					return
-				}
-				if *w.body.Error != *tt.expectedError {
-					t.Errorf("error = %v, expected %v", *w.body.Error, *tt.expectedError)
-				}
-			} else {
-				if tt.expectedError == nil {
-					if w.body.Error != nil {
-						t.Error("expectedError = nil, but error != nil")
-						return
-					}
-				}
-			}
 		})
 
 	}

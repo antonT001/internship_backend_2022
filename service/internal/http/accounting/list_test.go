@@ -72,29 +72,14 @@ func Test_accounting_List(t *testing.T) {
 	year, _ := vo.ExamineYear(y)
 	input.Year = year
 	mockAccounting.On("List", input).Return(nil, nil).Once()
+	u := h.New(mockAccounting, mockLogger)
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u := h.New(mockAccounting, mockLogger)
 			u.List(&w, tt.r)
 			assert.Equal(tt.expectedSuccess, w.body.Success)
 			assert.Equal(tt.expectedCode, w.statusCode)
-			if tt.expectedError != nil {
-				if w.body.Error == nil {
-					t.Error("expectedError != nil, but error == nil")
-					return
-				}
-				if *w.body.Error != *tt.expectedError {
-					t.Errorf("error = %v, expected %v", *w.body.Error, *tt.expectedError)
-				}
-			} else {
-				if tt.expectedError == nil {
-					if w.body.Error != nil {
-						t.Error("expectedError = nil, but error != nil")
-						return
-					}
-				}
-			}
+
 		})
 
 	}

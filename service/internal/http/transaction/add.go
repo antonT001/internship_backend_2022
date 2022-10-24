@@ -71,7 +71,11 @@ func validateAdd(bodyBytes []byte) (*models.TransactionFields, error) {
 	}
 	addIn.UserID = userID
 
-	addIn.Type = add.Type //TODO добавить vo
+	typeTrx, err := vo.ExamineTypeTrx(add.Type)
+	if err != nil {
+		return nil, fmt.Errorf(c.TYPE_TRANSACTION + err.Error())
+	}
+	addIn.Type = typeTrx
 
 	money, err := vo.ExamineDeltaMoney(add.Money)
 	if err != nil {
