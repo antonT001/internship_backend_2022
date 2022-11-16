@@ -1,6 +1,6 @@
 # internship_backend_2022
 
-<a href=https://github.com/avito-tech/internship_backend_2022>Текст тестового задания Авито 2022<\a>
+<a href=https://github.com/avito-tech/internship_backend_2022>Текст тестового задания Авито 2022</a>
 
 Для запуска проекта:
 1. создать файл docker/.env (образец docker/.env.sample, можно указать ТОЛЬКО MYSQL_DATA_PATH свой, а остальное оставить как есть)
